@@ -40,6 +40,7 @@ const camelSvg = (id) => `
 
 document.querySelector('#app').innerHTML = `
   <h1>Hi Mohamed!</h1>
+  <p class="subtitle" dir="rtl" lang="ar">أهلاً يا محمد!</p>
   <div class="camels" aria-hidden="true">
     <div class="camel camel-1">${camelSvg(1)}</div>
     <div class="camel camel-2">${camelSvg(2)}</div>

@@ -48,6 +48,20 @@ h1 {
   animation: pop-in 0.8s ease-out, float 3s ease-in-out infinite 0.8s;
 }
 
+.subtitle {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, system-ui, sans-serif;
+  color: #fff;
+  text-shadow:
+    0 0 10px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(192, 154, 46, 0.6);
+  animation: pop-in 0.8s ease-out 0.15s both, float 3s ease-in-out infinite 0.95s;
+}
+
 @keyframes pop-in {
   0% {
     opacity: 0;
