@@ -45,3 +45,137 @@ h1 {
     transform: translateY(110vh) translateX(20px);
   }
 }
+
+.chopper {
+  position: fixed;
+  bottom: 6vh;
+  left: -260px;
+  width: 220px;
+  z-index: 1;
+  animation: ride 8s linear infinite;
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.45));
+}
+
+.chopper svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.chopper-shadow {
+  fill: rgba(0, 0, 0, 0.25);
+}
+
+.chopper-frame-line {
+  fill: none;
+  stroke: #111114;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chopper-thin {
+  stroke-width: 3;
+}
+
+.chopper-seat {
+  fill: #1a1a1a;
+}
+
+.chopper-tank {
+  fill: #d61f26;
+}
+
+.chopper-tank-outline {
+  fill: none;
+  stroke: #ffcf40;
+  stroke-width: 1.5;
+}
+
+.chopper-tank-stripe {
+  stroke: #ffcf40;
+  stroke-width: 2;
+}
+
+.chopper-engine rect {
+  fill: #c7ccd1;
+  stroke: #55595e;
+  stroke-width: 1.5;
+}
+
+.chopper-fork {
+  stroke: #b5b9bd;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.chopper-fork-highlight {
+  stroke: #f2f4f6;
+  stroke-width: 2;
+}
+
+.chopper-bar {
+  fill: none;
+  stroke: #c7ccd1;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.chopper-grip {
+  fill: #1a1a1a;
+}
+
+.chopper-headlight {
+  fill: #fff4cc;
+  stroke: #c7ccd1;
+  stroke-width: 2;
+}
+
+.chopper-exhaust {
+  fill: none;
+  stroke: #e4e7ea;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.chopper-exhaust-tip {
+  fill: #b5b9bd;
+}
+
+.chopper-tire {
+  fill: #0c0c0d;
+}
+
+.chopper-rim {
+  fill: none;
+  stroke: #d9dcdf;
+  stroke-width: 2.5;
+}
+
+.chopper-hub {
+  fill: #d9dcdf;
+}
+
+.chopper-spoke {
+  stroke: #9a9ea2;
+  stroke-width: 1.2;
+}
+
+.chopper-wheel {
+  animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ride {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(100vw + 260px));
+  }
+}
