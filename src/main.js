@@ -1,6 +1,6 @@
 import './style.css';
 
-document.querySelector('#app').innerHTML = '<h1>Hi Dato</h1>';
+document.querySelector('#app').innerHTML = '<h1>გამარჯობა დათო</h1>';
 
 const snowContainer = document.createElement('div');
 snowContainer.className = 'snow';
