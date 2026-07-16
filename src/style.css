@@ -10,12 +10,55 @@ body {
   display: grid;
   place-items: center;
   font-family: system-ui, sans-serif;
-  background: #f6f6f7;
+  background: linear-gradient(180deg, #a8dcf0 0%, #d8f0e8 35%, #fdf3c0 70%, #ffd9a8 100%);
+  background-attachment: fixed;
   color: #1a1a1a;
+  overflow: hidden;
 }
 
 h1 {
   font-size: 2.5rem;
   font-weight: 600;
   letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+
+.cones {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cone-float {
+  position: absolute;
+  bottom: -160px;
+  animation-name: float-up;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.ice-cream {
+  width: 100%;
+  height: auto;
+  animation: sway 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes float-up {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100vh - 320px));
+  }
+}
+
+@keyframes sway {
+  from {
+    transform: rotate(calc(var(--sway, 4deg) * -1));
+  }
+  to {
+    transform: rotate(var(--sway, 4deg));
+  }
 }
