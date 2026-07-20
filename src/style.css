@@ -324,6 +324,49 @@ h1 {
   font-size: 0.68rem;
 }
 
+.season-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 48px;
+  margin-top: 0.4rem;
+}
+
+.season-bar-wrap {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 3px;
+}
+
+.season-bar {
+  width: 100%;
+  min-height: 2px;
+  background: #b7d9c2;
+  border-radius: 2px 2px 0 0;
+}
+
+.season-bar-wrap.is-current .season-bar {
+  background: #2e8b57;
+}
+
+.season-label {
+  font-size: 0.6rem;
+  color: #999;
+}
+
+.season-bar-wrap.is-current .season-label {
+  color: #2e6b45;
+  font-weight: 700;
+}
+
+.season-summary {
+  margin-top: 0.5rem !important;
+}
+
 .safety-list {
   margin: 0;
   padding-left: 1.2rem;

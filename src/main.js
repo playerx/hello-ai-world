@@ -232,6 +232,99 @@ function formatPercent(count, total) {
   return `${pct.toFixed(pct < 10 ? 1 : 0)}%`;
 }
 
+const MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTH_LABEL = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+
+const seasonCache = new Map();
+let currentLat = null;
+let currentLng = null;
+
+async function fetchSeasonality(taxonId, lat, lng) {
+  const key = `${taxonId}:${lat.toFixed(2)}:${lng.toFixed(2)}`;
+  if (seasonCache.has(key)) return seasonCache.get(key);
+  const promise = (async () => {
+    try {
+      const url = `https://api.inaturalist.org/v1/observations/histogram?date_field=observed&interval=month_of_year&lat=${lat}&lng=${lng}&radius=20&taxon_id=${taxonId}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Request failed');
+      const data = await res.json();
+      const buckets = data.results && data.results.month_of_year;
+      if (!buckets) return null;
+      return Array.from({ length: 12 }, (_, i) => buckets[String(i + 1)] || 0);
+    } catch (err) {
+      return null;
+    }
+  })();
+  seasonCache.set(key, promise);
+  return promise;
+}
+
+function summarizeActiveMonths(counts) {
+  const max = Math.max(...counts);
+  if (max === 0) return null;
+  const threshold = max * 0.6;
+  const activeIdx = counts
+    .map((c, i) => (c >= threshold ? i : -1))
+    .filter((i) => i >= 0);
+
+  const sorted = [...activeIdx].sort((a, b) => a - b);
+  const groups = [];
+  let start = sorted[0];
+  let prev = sorted[0];
+  for (let i = 1; i < sorted.length; i++) {
+    if (sorted[i] === prev + 1) {
+      prev = sorted[i];
+      continue;
+    }
+    groups.push([start, prev]);
+    start = prev = sorted[i];
+  }
+  groups.push([start, prev]);
+
+  if (groups.length > 1) {
+    const first = groups[0];
+    const last = groups[groups.length - 1];
+    if (first[0] === 0 && last[1] === 11) {
+      groups[0] = [last[0], first[1]];
+      groups.pop();
+    }
+  }
+
+  return groups
+    .map(([a, b]) => (a === b ? MONTH_SHORT[a] : `${MONTH_SHORT[a]}–${MONTH_SHORT[b]}`))
+    .join(', ');
+}
+
+function renderSeasonChart(counts) {
+  const total = counts.reduce((a, b) => a + b, 0);
+  if (total === 0) {
+    return '<p class="season-status">No seasonal data available for this species here.</p>';
+  }
+
+  const max = Math.max(...counts, 1);
+  const currentMonth = new Date().getMonth();
+
+  const bars = counts
+    .map((c, i) => {
+      const pct = Math.max(Math.round((c / max) * 100), c > 0 ? 6 : 2);
+      return `
+        <div class="season-bar-wrap ${i === currentMonth ? 'is-current' : ''}" title="${MONTH_SHORT[i]}: ${c} recorded sighting${c === 1 ? '' : 's'}">
+          <div class="season-bar" style="height:${pct}%"></div>
+          <span class="season-label">${MONTH_LABEL[i]}</span>
+        </div>
+      `;
+    })
+    .join('');
+
+  const summary = summarizeActiveMonths(counts);
+  const currentIsActive = summary && counts[currentMonth] >= max * 0.6;
+
+  return `
+    <div class="season-chart">${bars}</div>
+    ${summary ? `<p class="season-summary">Most often seen: <strong>${summary}</strong>${currentIsActive ? ' — good timing, that includes now.' : ''}</p>` : ''}
+  `;
+}
+
 function renderCard(item, total) {
   const taxon = item.taxon;
   if (!taxon) return '';
@@ -258,6 +351,10 @@ function renderCard(item, total) {
         <details class="wildlife-card-tip wildlife-altnames" data-taxon-id="${taxon.id}" data-primary-name="${name.toLowerCase()}">
           <summary>Other names</summary>
           <p class="altnames-body">Tap to load other common names…</p>
+        </details>
+        <details class="wildlife-card-tip wildlife-season-details" data-taxon-id="${taxon.id}">
+          <summary>When to see it</summary>
+          <div class="season-body"><p class="season-status">Tap to load seasonal data…</p></div>
         </details>
         ${birdInfo ? `
           <details class="wildlife-card-tip">
@@ -295,6 +392,22 @@ function wireUpCards(container) {
       body.textContent = others.length
         ? others.slice(0, 6).join(', ')
         : 'No other common names on record for this species.';
+    });
+  });
+
+  container.querySelectorAll('.wildlife-season-details').forEach((details) => {
+    details.addEventListener('toggle', async () => {
+      if (!details.open || details.dataset.loaded) return;
+      details.dataset.loaded = '1';
+      const body = details.querySelector('.season-body');
+      if (currentLat === null || currentLng === null) {
+        body.innerHTML = '<p class="season-status">Location unavailable.</p>';
+        return;
+      }
+      const counts = await fetchSeasonality(details.dataset.taxonId, currentLat, currentLng);
+      body.innerHTML = counts
+        ? renderSeasonChart(counts)
+        : '<p class="season-status">No seasonal data available for this species here.</p>';
     });
   });
 
@@ -356,6 +469,8 @@ function renderResults(results, resultsEl) {
 async function loadWildlifeForCoords(latitude, longitude, statusEl, resultsEl, placeLabel) {
   statusEl.textContent = placeLabel ? `Looking for wildlife near ${placeLabel}…` : 'Looking for wildlife near you…';
   resultsEl.innerHTML = '';
+  currentLat = Number(latitude);
+  currentLng = Number(longitude);
   try {
     const url = `https://api.inaturalist.org/v1/observations/species_counts?lat=${latitude}&lng=${longitude}&radius=20&per_page=100`;
     const res = await fetch(url);
