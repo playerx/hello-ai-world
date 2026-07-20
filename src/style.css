@@ -7,15 +7,187 @@
 body {
   margin: 0;
   min-height: 100vh;
-  display: grid;
-  place-items: center;
   font-family: system-ui, sans-serif;
-  background: #f6f6f7;
-  color: #1a1a1a;
+  background: linear-gradient(135deg, #0f5132, #2e8b57, #7ac142);
+  background-attachment: fixed;
+  color: #ffffff;
+  position: relative;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+  text-align: center;
 }
 
 h1 {
   font-size: 2.5rem;
   font-weight: 600;
   letter-spacing: -0.02em;
+  margin: 0 0 2.5rem;
+}
+
+.birds {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bird {
+  position: absolute;
+  width: 40px;
+  height: 20px;
+  animation: fly linear infinite;
+}
+
+.bird-wings {
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 2;
+  stroke-linecap: round;
+  animation: flap 0.6s ease-in-out infinite;
+}
+
+.bird:nth-child(1) { top: 15%; animation-duration: 18s; animation-delay: 0s; }
+.bird:nth-child(2) { top: 30%; animation-duration: 22s; animation-delay: -4s; }
+.bird:nth-child(3) { top: 10%; animation-duration: 15s; animation-delay: -9s; }
+.bird:nth-child(4) { top: 45%; animation-duration: 25s; animation-delay: -2s; }
+.bird:nth-child(5) { top: 22%; animation-duration: 20s; animation-delay: -12s; }
+
+@keyframes fly {
+  from { transform: translateX(-10vw); }
+  to { transform: translateX(110vw); }
+}
+
+@keyframes flap {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.4); }
+}
+
+.wildlife-panel,
+.safety-panel {
+  background: rgba(255, 255, 255, 0.96);
+  color: #1a1a1a;
+  border-radius: 16px;
+  padding: 1.75rem 1.5rem;
+  margin-top: 1.5rem;
+  text-align: left;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.wildlife-panel h2,
+.safety-panel h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.3rem;
+}
+
+.wildlife-intro {
+  margin: 0 0 1.25rem;
+  color: #4a4a4a;
+  font-size: 0.95rem;
+}
+
+.wildlife-btn {
+  background: #2e8b57;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.wildlife-btn:hover {
+  background: #256e46;
+}
+
+.wildlife-status {
+  margin: 0.9rem 0 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.wildlife-group {
+  margin-top: 1.5rem;
+}
+
+.wildlife-group h3 {
+  font-size: 1.05rem;
+  margin: 0 0 0.75rem;
+}
+
+.wildlife-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.9rem;
+}
+
+.wildlife-card {
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fafafa;
+}
+
+.wildlife-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  display: block;
+}
+
+.wildlife-card-noimg {
+  width: 100%;
+  height: 100px;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  background: #eef4ee;
+}
+
+.wildlife-card-body {
+  padding: 0.6rem 0.7rem;
+}
+
+.wildlife-card-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.25;
+}
+
+.wildlife-card-sci {
+  font-style: italic;
+  font-size: 0.78rem;
+  color: #777;
+  margin-top: 0.15rem;
+}
+
+.wildlife-card.is-dangerous {
+  border-color: #d64545;
+}
+
+.wildlife-card-warning {
+  margin-top: 0.4rem;
+  color: #b32020;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.safety-list {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.safety-list li {
+  margin-bottom: 0.6rem;
+  line-height: 1.4;
+  font-size: 0.95rem;
 }
