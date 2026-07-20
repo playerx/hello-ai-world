@@ -238,13 +238,15 @@ const MONTH_LABEL = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D']
 const seasonCache = new Map();
 let currentLat = null;
 let currentLng = null;
+let currentRadius = 20;
+let lastSearch = null;
 
-async function fetchSeasonality(taxonId, lat, lng) {
-  const key = `${taxonId}:${lat.toFixed(2)}:${lng.toFixed(2)}`;
+async function fetchSeasonality(taxonId, lat, lng, radius) {
+  const key = `${taxonId}:${lat.toFixed(2)}:${lng.toFixed(2)}:${radius}`;
   if (seasonCache.has(key)) return seasonCache.get(key);
   const promise = (async () => {
     try {
-      const url = `https://api.inaturalist.org/v1/observations/histogram?date_field=observed&interval=month_of_year&lat=${lat}&lng=${lng}&radius=20&taxon_id=${taxonId}`;
+      const url = `https://api.inaturalist.org/v1/observations/histogram?date_field=observed&interval=month_of_year&lat=${lat}&lng=${lng}&radius=${radius}&taxon_id=${taxonId}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error('Request failed');
       const data = await res.json();
@@ -404,7 +406,7 @@ function wireUpCards(container) {
         body.innerHTML = '<p class="season-status">Location unavailable.</p>';
         return;
       }
-      const counts = await fetchSeasonality(details.dataset.taxonId, currentLat, currentLng);
+      const counts = await fetchSeasonality(details.dataset.taxonId, currentLat, currentLng, currentRadius);
       body.innerHTML = counts
         ? renderSeasonChart(counts)
         : '<p class="season-status">No seasonal data available for this species here.</p>';
@@ -471,8 +473,9 @@ async function loadWildlifeForCoords(latitude, longitude, statusEl, resultsEl, p
   resultsEl.innerHTML = '';
   currentLat = Number(latitude);
   currentLng = Number(longitude);
+  lastSearch = { latitude, longitude, placeLabel };
   try {
-    const url = `https://api.inaturalist.org/v1/observations/species_counts?lat=${latitude}&lng=${longitude}&radius=20&per_page=100`;
+    const url = `https://api.inaturalist.org/v1/observations/species_counts?lat=${latitude}&lng=${longitude}&radius=${currentRadius}&per_page=100`;
     const res = await fetch(url);
     if (!res.ok) throw new Error('Request failed');
     const data = await res.json();
@@ -551,6 +554,15 @@ document.querySelector('#app').innerHTML = `
         </form>
       </div>
 
+      <label class="radius-control">
+        Search radius:
+        <select id="radius-select">
+          <option value="5">5 km (~3 mi) — very local</option>
+          <option value="20" selected>20 km (~12 mi) — default</option>
+          <option value="50">50 km (~30 mi) — wide area</option>
+        </select>
+      </label>
+
       <p id="wildlife-status" class="wildlife-status"></p>
       <div id="wildlife-results"></div>
     </section>
@@ -575,4 +587,11 @@ document.querySelector('#location-form').addEventListener('submit', (e) => {
   e.preventDefault();
   const input = document.querySelector('#location-input');
   findWildlifeForPlace(input.value, statusEl, resultsEl);
+});
+
+document.querySelector('#radius-select').addEventListener('change', (e) => {
+  currentRadius = Number(e.target.value);
+  if (lastSearch) {
+    loadWildlifeForCoords(lastSearch.latitude, lastSearch.longitude, statusEl, resultsEl, lastSearch.placeLabel);
+  }
 });

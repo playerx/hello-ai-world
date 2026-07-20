@@ -265,6 +265,24 @@ h1 {
   background: #eef7f0;
 }
 
+.radius-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.radius-control select {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  background: #fff;
+  color: #1a1a1a;
+}
+
 .wildlife-card-tip {
   margin-top: 0.5rem;
   font-size: 0.8rem;
