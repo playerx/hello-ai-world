@@ -48,6 +48,68 @@ const SPECIFIC_TIPS = [
     tip: 'Avoid reaching into rocks, logs, or leaf litter with bare hands, and shake out boots and gear before putting them on. Stings are painful but rarely dangerous to healthy adults.' },
 ];
 
+const BIRD_BEHAVIOR = [
+  { match: ['jay', 'raven', 'crow', 'magpie'],
+    zone: 'High branches & treetops', habitat: 'Forests, parks, and urban areas — very adaptable',
+    note: 'Loud and easy to hear before you see them. Often perch out in the open on high branches, wires, or fence posts.' },
+  { match: ['hawk', 'eagle', 'falcon', 'osprey', 'kestrel', 'harrier'],
+    zone: 'High perches & open sky', habitat: 'Open areas, forest edges, near water',
+    note: 'Look up — they often soar in slow circles or perch on dead trees, poles, and cliff edges scanning for prey.' },
+  { match: ['owl'],
+    zone: 'Tree cavities & dense branches (high)', habitat: 'Forests and wooded areas',
+    note: 'Active mostly at dawn, dusk, and night. Look for a rounded silhouette tucked close to the trunk, and listen for hooting.' },
+  { match: ['woodpecker', 'sapsucker', 'flicker'],
+    zone: 'Tree trunks & large branches (low–mid)', habitat: 'Forests, wooded parks',
+    note: 'Listen for tapping or drumming sounds. They cling upright to trunks rather than perching on branches like most birds.' },
+  { match: ['warbler', 'vireo', 'kinglet', 'tanager'],
+    zone: 'Leafy canopy (mid–high)', habitat: 'Forests and dense woodland',
+    note: 'Small, fast-moving, and easily hidden in foliage. Often easier to locate by song than by sight — binoculars help a lot.' },
+  { match: ['chickadee', 'nuthatch', 'titmouse', 'creeper'],
+    zone: 'Tree trunks & mid branches', habitat: 'Forests, woodland edges, backyard feeders',
+    note: 'Very active and often travel in small mixed flocks, moving quickly from branch to branch.' },
+  { match: ['sparrow', 'junco', 'towhee', 'finch', 'bunting'],
+    zone: 'Ground & low shrubs', habitat: 'Open areas, brush, backyards, trailsides',
+    note: 'Look on or near the ground under bushes — they forage by hopping and scratching through leaf litter.' },
+  { match: ['robin', 'thrush', 'blackbird', 'grackle', 'starling'],
+    zone: 'Ground & low branches', habitat: 'Lawns, open woodland, parks',
+    note: 'Often seen hopping across open ground hunting for insects and worms, especially after rain.' },
+  { match: ['grouse', 'quail', 'pheasant', 'turkey', 'ptarmigan'],
+    zone: 'Ground level', habitat: 'Forest floor, brush, open fields',
+    note: 'Ground-dwelling and well camouflaged — you may hear rustling or a sudden burst of flight before you spot one.' },
+  { match: ['pigeon', 'dove'],
+    zone: 'Ledges, wires & ground', habitat: 'Urban areas and open ground',
+    note: 'Very tolerant of people — commonly seen walking on the ground or perched on buildings and wires.' },
+  { match: ['gull'],
+    zone: 'Open ground, water & rooftops', habitat: 'Coastlines, lakes, parking lots, urban areas',
+    note: 'Usually in groups in open areas, especially near water or wherever food is easy to find.' },
+  { match: ['duck', 'goose', 'swan', 'heron', 'egret', 'kingfisher', 'coot', 'grebe'],
+    zone: 'On or near water', habitat: 'Lakes, rivers, ponds, wetlands',
+    note: 'Stick close to the shoreline and scan the water surface and edges — herons often stand motionless in shallow water.' },
+  { match: ['hummingbird'],
+    zone: 'Flowers & understory (low–mid)', habitat: 'Gardens, forest edges, near flowering plants',
+    note: 'Look near brightly colored flowers — you’ll often hear their fast wingbeats before you spot them.' },
+  { match: ['swallow', 'swift', 'martin'],
+    zone: 'In flight (open air)', habitat: 'Open areas, near water, over fields',
+    note: 'Rarely perch in view — watch for fast, swooping flight catching insects in the air, often near water at dusk.' },
+  { match: ['flycatcher', 'phoebe', 'kingbird'],
+    zone: 'Exposed mid-level perches', habitat: 'Open woodland, forest edges',
+    note: 'Perches upright on an exposed branch, darts out to catch an insect, then returns to nearly the same spot.' },
+  { match: ['killdeer', 'plover', 'sandpiper'],
+    zone: 'Ground & shorelines', habitat: 'Open ground, gravel, shorelines',
+    note: 'Ground-nesting — watch your step in open gravel or grassy areas near water.' },
+];
+
+const DEFAULT_BIRD_INFO = {
+  zone: 'Varies — check branches from low to high',
+  habitat: 'Varies by species',
+  note: 'Behavior varies by species — scan from ground level up to the treetops, and listen for calls to help locate it.',
+};
+
+function birdInfoFor(name, sciName) {
+  const lower = `${name} ${sciName}`.toLowerCase();
+  return BIRD_BEHAVIOR.find((b) => b.match.some((m) => lower.includes(m))) || DEFAULT_BIRD_INFO;
+}
+
 const SAFETY_TIPS = [
   'Make some noise as you walk — most animals will clear out of your path if they hear you coming.',
   'If you see a snake, stop and back away slowly. Never try to move, touch, or handle it — that’s when most bites happen.',
@@ -90,6 +152,7 @@ function renderCard(item, total) {
   const category = categoryFor(taxon.iconic_taxon_name);
   const percent = formatPercent(item.count, total);
   const tip = tipFor(name, sciName, category.key);
+  const birdInfo = category.key === 'Aves' ? birdInfoFor(name, sciName) : null;
 
   return `
     <div class="wildlife-card ${dangerous ? 'is-dangerous' : ''}">
@@ -101,6 +164,14 @@ function renderCard(item, total) {
         </div>
         <div class="wildlife-card-sci">${sciName}</div>
         ${dangerous ? '<div class="wildlife-card-warning">⚠ Use caution — keep your distance</div>' : ''}
+        ${birdInfo ? `
+          <details class="wildlife-card-tip">
+            <summary>Where to spot it</summary>
+            <p><strong>Height:</strong> ${birdInfo.zone}<br />
+            <strong>Habitat:</strong> ${birdInfo.habitat}<br />
+            ${birdInfo.note}</p>
+          </details>
+        ` : ''}
         <details class="wildlife-card-tip">
           <summary>If you encounter one</summary>
           <p>${tip}</p>
