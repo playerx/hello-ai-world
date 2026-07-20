@@ -10,12 +10,258 @@ body {
   display: grid;
   place-items: center;
   font-family: system-ui, sans-serif;
-  background: #f6f6f7;
+  background: linear-gradient(
+    160deg,
+    #1e6fa8 0%,
+    #3a92c9 20%,
+    #6bb6e0 40%,
+    #87ceeb 60%,
+    #b3e0f2 80%,
+    #dff4fb 100%
+  );
   color: #1a1a1a;
+  position: relative;
+  overflow: hidden;
+  padding-top: 68px;
 }
 
 h1 {
   font-size: 2.5rem;
   font-weight: 600;
   letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: min(360px, 90vw);
+  padding: 2.5rem 2rem;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(20, 60, 90, 0.2);
+}
+
+.login-card h1 {
+  margin: 0 0 0.35rem;
+  font-size: 1.75rem;
+}
+
+.login-subtitle {
+  margin: 0 0 1.5rem;
+  color: #2c3e4a;
+  font-size: 0.95rem;
+}
+
+.login-card label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.login-card input {
+  padding: 0.7rem 0.85rem;
+  margin-bottom: 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 0.95rem;
+  color: #1a1a1a;
+  font-family: inherit;
+}
+
+.login-card input::placeholder {
+  color: #5a6b76;
+}
+
+.login-card input:focus {
+  outline: none;
+  border-color: #1e6fa8;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.login-card button {
+  padding: 0.75rem;
+  margin-top: 0.4rem;
+  border: none;
+  border-radius: 8px;
+  background: #1e6fa8;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.login-card button:hover {
+  background: #175a89;
+}
+
+.login-footer {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #2c3e4a;
+}
+
+.login-footer a {
+  color: #1e6fa8;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #1a1a1a;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.nav-links a {
+  color: #1a1a1a;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.burger span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  background: #1a1a1a;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.burger[aria-expanded='true'] span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.burger[aria-expanded='true'] span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger[aria-expanded='true'] span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+@media (max-width: 640px) {
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+  }
+
+  .nav-links.open {
+    max-height: 320px;
+  }
+
+  .nav-links a {
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .burger {
+    display: flex;
+  }
+}
+
+.bird {
+  position: absolute;
+  top: var(--bird-top, 20%);
+  left: -10%;
+  width: 40px;
+  height: 20px;
+  animation: fly var(--bird-duration, 18s) linear infinite;
+  animation-delay: var(--bird-delay, 0s);
+  opacity: 0.85;
+}
+
+.bird svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: none;
+  stroke: #1a1a1a;
+  stroke-width: 3;
+  stroke-linecap: round;
+  animation: flap 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes fly {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(120vw);
+  }
+}
+
+@keyframes flap {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0.4);
+  }
 }
