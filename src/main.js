@@ -533,7 +533,7 @@ document.querySelector('#app').innerHTML = `
     ${bird()}${bird()}${bird()}${bird()}${bird()}
   </div>
   <div class="page">
-    <h1>Hi Kate</h1>
+    <h1>Kate's Trailwatch</h1>
 
     <section class="wildlife-panel">
       <h2>🐾 Wildlife Near You</h2>
