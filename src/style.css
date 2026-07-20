@@ -193,15 +193,76 @@ h1 {
   margin-top: 0.15rem;
 }
 
-.wildlife-card.is-dangerous {
-  border-color: #d64545;
-}
-
 .wildlife-card-warning {
   margin-top: 0.4rem;
-  color: #b32020;
   font-size: 0.78rem;
   font-weight: 600;
+}
+
+.wildlife-card.danger-low { border-color: #c99a00; border-width: 2px; }
+.wildlife-card.danger-moderate { border-color: #d9761b; border-width: 2px; }
+.wildlife-card.danger-high { border-color: #c62828; border-width: 2px; }
+
+.wildlife-card-warning.danger-low { color: #8a6a00; }
+.wildlife-card-warning.danger-moderate { color: #b25200; }
+.wildlife-card-warning.danger-high { color: #c62828; }
+
+.danger-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.danger-legend-item {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+}
+
+.danger-legend-item.danger-low { color: #8a6a00; border-color: #c99a00; background: #fff9e6; }
+.danger-legend-item.danger-moderate { color: #b25200; border-color: #d9761b; background: #fff1e4; }
+.danger-legend-item.danger-high { color: #c62828; border-color: #c62828; background: #fdeaea; }
+
+.location-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.location-or {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+.location-form {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 240px;
+}
+
+.location-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+.wildlife-btn-secondary {
+  background: #fff;
+  color: #2e8b57;
+  border: 1.5px solid #2e8b57;
+}
+
+.wildlife-btn-secondary:hover {
+  background: #eef7f0;
 }
 
 .wildlife-card-tip {
@@ -219,6 +280,48 @@ h1 {
   margin: 0.4rem 0 0;
   color: #333;
   line-height: 1.4;
+}
+
+.altnames-body {
+  color: #555 !important;
+  font-style: italic;
+}
+
+.wildlife-sound-player {
+  margin-top: 0.5rem;
+}
+
+.sound-load-btn {
+  background: #eef4ee;
+  color: #2e6b45;
+  border: none;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sound-load-btn:hover {
+  background: #dcece0;
+}
+
+.wildlife-sound-player audio {
+  width: 100%;
+  height: 32px;
+  margin-top: 0.3rem;
+}
+
+.sound-status {
+  color: #777;
+  font-size: 0.78rem;
+}
+
+.sound-attribution {
+  display: block;
+  margin-top: 0.2rem;
+  color: #999;
+  font-size: 0.68rem;
 }
 
 .safety-list {
