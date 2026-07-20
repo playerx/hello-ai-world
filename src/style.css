@@ -126,7 +126,7 @@ h1 {
 
 .wildlife-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 0.9rem;
 }
 
@@ -157,10 +157,33 @@ h1 {
   padding: 0.6rem 0.7rem;
 }
 
+.wildlife-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .wildlife-card-name {
   font-weight: 600;
   font-size: 0.9rem;
   line-height: 1.25;
+}
+
+.wildlife-card-pct {
+  flex-shrink: 0;
+  background: #eef4ee;
+  color: #2e6b45;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.is-dangerous .wildlife-card-pct {
+  background: #fbe6e6;
+  color: #b32020;
 }
 
 .wildlife-card-sci {
@@ -179,6 +202,23 @@ h1 {
   color: #b32020;
   font-size: 0.78rem;
   font-weight: 600;
+}
+
+.wildlife-card-tip {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.wildlife-card-tip summary {
+  cursor: pointer;
+  color: #2e6b45;
+  font-weight: 600;
+}
+
+.wildlife-card-tip p {
+  margin: 0.4rem 0 0;
+  color: #333;
+  line-height: 1.4;
 }
 
 .safety-list {
