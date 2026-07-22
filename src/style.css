@@ -19,3 +19,71 @@ h1 {
   font-weight: 600;
   letter-spacing: -0.02em;
 }
+
+.food-row {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.food-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  transform: translateY(24px) scale(0.9);
+  animation: pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.food-card:hover .food-emoji {
+  animation: wiggle 0.6s ease-in-out infinite;
+}
+
+.food-emoji {
+  font-size: 3rem;
+  display: inline-block;
+  animation: float 2.4s ease-in-out infinite;
+}
+
+.food-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #4a4a4a;
+}
+
+@keyframes pop-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-8deg);
+  }
+  75% {
+    transform: rotate(8deg);
+  }
+}
