@@ -10,7 +10,7 @@ body {
   display: grid;
   place-items: center;
   font-family: system-ui, sans-serif;
-  background: #f6f6f7;
+  background: linear-gradient(180deg, #4fa8e8 0%, #bfe3fb 100%);
   color: #1a1a1a;
 }
 
@@ -18,4 +18,33 @@ h1 {
   font-size: 2.5rem;
   font-weight: 600;
   letter-spacing: -0.02em;
+  z-index: 1;
+}
+
+.bubbles {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -2rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff8d6, #f5c542 60%, #d9a441 100%);
+  opacity: 0.7;
+  animation: rise linear infinite;
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(0) translateX(0);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateY(-110vh) translateX(var(--drift, 0));
+    opacity: 0;
+  }
 }
