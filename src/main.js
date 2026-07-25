@@ -65,7 +65,22 @@ function uid() {
 // ---------- storage: Supabase (when configured) ----------
 
 function fromRow(row) {
-  return { id: row.id, negative: row.negative, positive: row.positive, createdAt: row.created_at, resolvedAt: row.resolved_at };
+  return { id: row.id, negative: row.negative, positive: row.positive, createdAt: row.created_at, resolvedAt: row.resolved_at, emoji: row.emoji || null };
+}
+
+async function fetchEmoji(text) {
+  if (!supabaseEnabled) return null;
+  try {
+    const { data, error } = await supabase.functions.invoke('generate-emoji', { body: { text } });
+    if (error) {
+      console.error('Failed to generate emoji', error);
+      return null;
+    }
+    return data?.emoji || null;
+  } catch (err) {
+    console.error('Failed to generate emoji', err);
+    return null;
+  }
 }
 
 async function fetchEntries() {
@@ -90,6 +105,7 @@ async function refreshAndRender() {
 
 async function addEntry(negative, positive) {
   const now = new Date().toISOString();
+  const emoji = await fetchEmoji(negative);
 
   if (supabaseEnabled && currentUser) {
     const { error } = await supabase.from(TABLE).insert({
@@ -98,10 +114,11 @@ async function addEntry(negative, positive) {
       positive: positive || null,
       created_at: now,
       resolved_at: positive ? now : null,
+      emoji,
     });
     if (error) console.error('Failed to save thought', error);
   } else {
-    entries.unshift({ id: uid(), negative, positive: positive || null, createdAt: now, resolvedAt: positive ? now : null });
+    entries.unshift({ id: uid(), negative, positive: positive || null, createdAt: now, resolvedAt: positive ? now : null, emoji });
     saveLocalEntries();
   }
 }
@@ -329,7 +346,7 @@ function renderTodoTab(pending) {
         .map(
           (e) => `
         <div class="card entry-card">
-          <div class="entry-meta">${formatDate(e.createdAt)}</div>
+          <div class="entry-meta">${e.emoji ? `<span class="entry-emoji">${e.emoji}</span> ` : ''}${formatDate(e.createdAt)}</div>
           <div class="entry-line"><span class="tag tag-negative">Negative</span> ${escapeHtml(e.negative)}</div>
           <form class="reframe-form" data-id="${e.id}">
             <textarea rows="2" placeholder="Add your reframe when you're ready..."></textarea>
@@ -360,7 +377,7 @@ function renderLogTab(resolved) {
               : '';
           return `
         <div class="card entry-card">
-          <div class="entry-meta">${formatDate(e.createdAt)}${took}</div>
+          <div class="entry-meta">${e.emoji ? `<span class="entry-emoji">${e.emoji}</span> ` : ''}${formatDate(e.createdAt)}${took}</div>
           <div class="entry-line"><span class="tag tag-negative">Negative</span> ${escapeHtml(e.negative)}</div>
           <div class="entry-line"><span class="tag tag-positive">Reframe</span> ${escapeHtml(e.positive)}</div>
           <div class="entry-actions">

@@ -283,6 +283,12 @@ textarea:focus {
   margin-bottom: 0.5rem;
 }
 
+.entry-emoji {
+  font-size: 1.1rem;
+  vertical-align: -1px;
+  margin-right: 0.15rem;
+}
+
 .entry-line {
   font-size: 0.95rem;
   line-height: 1.5;
