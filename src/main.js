@@ -3,7 +3,6 @@ import { supabaseEnabled, supabase } from './supabase.js';
 
 const STORAGE_KEY = 'cbt-thought-journal';
 const TABLE = 'thoughts';
-const DEPLOYED_URL = 'https://playerx-59i8n0-15-bwf33.sprites.app';
 
 let currentUser = null;
 let entries = [];
@@ -26,7 +25,7 @@ function mapUser(user) {
 async function handleGoogleSignIn() {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: DEPLOYED_URL },
+    options: { redirectTo: window.location.origin },
   });
   if (error) {
     console.error('Google sign-in failed', error);
