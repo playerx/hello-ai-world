@@ -7,6 +7,9 @@ const TABLE = 'thoughts';
 let currentUser = null;
 let entries = [];
 let activeTab = 'new';
+let authError = null;
+let signingIn = false;
+let booting = true;
 
 const app = document.querySelector('#app');
 
@@ -23,14 +26,22 @@ function mapUser(user) {
 }
 
 async function handleGoogleSignIn() {
+  authError = null;
+  signingIn = true;
+  render();
+
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: { redirectTo: window.location.origin },
   });
+
   if (error) {
     console.error('Google sign-in failed', error);
-    alert('Sign-in failed. Please try again.');
+    authError = "Sign-in failed. Please try again.";
+    signingIn = false;
+    render();
   }
+  // On success the browser navigates away to Google, so no further render is needed.
 }
 
 async function signOut() {
@@ -277,6 +288,11 @@ const FLIP_ARROW_ICON = `
 // ---------- rendering ----------
 
 function render() {
+  if (booting) {
+    renderBootScreen();
+    return;
+  }
+
   if (supabaseEnabled && !currentUser) {
     renderLoginScreen();
     return;
@@ -313,6 +329,17 @@ function render() {
   attachListeners();
 }
 
+function renderBootScreen() {
+  app.innerHTML = `
+    <div class="login-screen">
+      <div class="boot-state">
+        <div class="brand-mark is-spinning">${BRAND_ICON}</div>
+        <p class="boot-text">Loading your journal…</p>
+      </div>
+    </div>
+  `;
+}
+
 function renderLoginScreen() {
   app.innerHTML = `
     <div class="login-screen">
@@ -320,7 +347,10 @@ function renderLoginScreen() {
         <div class="brand-mark">${BRAND_ICON}</div>
         <h1>Flip</h1>
         <p class="subtitle">Sign in with Google to keep your journal private to you and synced across your devices.</p>
-        <button type="button" id="google-signin-btn" class="btn-google">Sign in with Google</button>
+        <button type="button" id="google-signin-btn" class="btn-google" ${signingIn ? 'disabled' : ''}>
+          ${signingIn ? '<span class="spinner"></span> Redirecting…' : 'Sign in with Google'}
+        </button>
+        ${authError ? `<p class="field-error">${escapeHtml(authError)}</p>` : ''}
       </div>
     </div>
   `;
@@ -491,6 +521,12 @@ function renderInsightsTab() {
 
 // ---------- events ----------
 
+function setButtonBusy(button, label) {
+  if (!button) return;
+  button.disabled = true;
+  button.innerHTML = `<span class="spinner"></span> ${label}`;
+}
+
 function attachListeners() {
   document.querySelectorAll('.tab-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -514,6 +550,7 @@ function attachListeners() {
         return;
       }
 
+      setButtonBusy(entryForm.querySelector('button[type="submit"]'), 'Saving…');
       await addEntry(negative, positive);
       activeTab = positive ? 'log' : 'todo';
       await refreshAndRender();
@@ -529,6 +566,7 @@ function attachListeners() {
         textarea.focus();
         return;
       }
+      setButtonBusy(form.querySelector('button[type="submit"]'), 'Saving…');
       await resolveEntry(form.dataset.id, positive);
       await refreshAndRender();
     });
@@ -565,11 +603,14 @@ function attachListeners() {
 // ---------- boot ----------
 
 async function boot() {
+  render(); // show the boot screen immediately while auth/data load
+
   if (supabaseEnabled) {
     const {
       data: { session },
     } = await supabase.auth.getSession();
     currentUser = session?.user ? mapUser(session.user) : null;
+    booting = false;
     await refreshAndRender();
 
     supabase.auth.onAuthStateChange(async (_event, newSession) => {
@@ -577,6 +618,7 @@ async function boot() {
       await refreshAndRender();
     });
   } else {
+    booting = false;
     await refreshAndRender();
   }
 }
