@@ -258,6 +258,22 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+const BRAND_ICON = `
+  <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17 2.1l4 4-4 4"/>
+    <path d="M3 12.7V12a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3"/>
+    <path d="M7 21.9l-4-4 4-4"/>
+    <path d="M21 11.3V12a9 9 0 0 1-9 9 9 9 0 0 1-6-2.3"/>
+  </svg>
+`;
+
+const FLIP_ARROW_ICON = `
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 5v14"/>
+    <path d="M6 13l6 6 6-6"/>
+  </svg>
+`;
+
 // ---------- rendering ----------
 
 function render() {
@@ -273,7 +289,8 @@ function render() {
     <div class="journal">
       <header class="journal-header">
         ${currentUser ? renderUserChip() : ''}
-        <h1>Flip</h1>
+        <div class="brand-mark">${BRAND_ICON}</div>
+        <div class="title-row"><h1>Flip</h1></div>
         <p class="subtitle">Log the negative thought. Add the reframe when it's ready. Watch the pattern change.</p>
       </header>
 
@@ -300,6 +317,7 @@ function renderLoginScreen() {
   app.innerHTML = `
     <div class="login-screen">
       <div class="card login-card">
+        <div class="brand-mark">${BRAND_ICON}</div>
         <h1>Flip</h1>
         <p class="subtitle">Sign in with Google to keep your journal private to you and synced across your devices.</p>
         <button type="button" id="google-signin-btn" class="btn-google">Sign in with Google</button>
@@ -337,7 +355,7 @@ function renderNewEntryTab() {
 
 function renderTodoTab(pending) {
   if (!pending.length) {
-    return `<div class="empty-state">Nothing waiting on you right now — nice work. 🎉</div>`;
+    return `<div class="empty-state"><span class="empty-icon">🎉</span>Nothing waiting on you right now — nice work.</div>`;
   }
   return `
     <div class="entry-list">
@@ -364,7 +382,7 @@ function renderTodoTab(pending) {
 
 function renderLogTab(resolved) {
   if (!resolved.length) {
-    return `<div class="empty-state">No reframed thoughts yet — they'll show up here once you add a positive thought.</div>`;
+    return `<div class="empty-state"><span class="empty-icon">📖</span>No reframed thoughts yet — they'll show up here once you add a positive thought.</div>`;
   }
   return `
     <div class="entry-list">
@@ -375,9 +393,10 @@ function renderLogTab(resolved) {
               ? ` · reframed ${formatDuration((new Date(e.resolvedAt) - new Date(e.createdAt)) / 36e5)} later`
               : '';
           return `
-        <div class="card entry-card">
+        <div class="card entry-card is-resolved">
           <div class="entry-meta">${e.emoji ? `<span class="entry-emoji">${e.emoji}</span> ` : ''}${formatDate(e.createdAt)}${took}</div>
           <div class="entry-line"><span class="tag tag-negative">Negative</span> ${escapeHtml(e.negative)}</div>
+          <div class="entry-flip-arrow">${FLIP_ARROW_ICON}</div>
           <div class="entry-line"><span class="tag tag-positive">Reframe</span> ${escapeHtml(e.positive)}</div>
           <div class="entry-actions">
             <button type="button" class="btn-danger" data-delete="${e.id}">Delete</button>
@@ -401,18 +420,22 @@ function renderInsightsTab() {
     <div class="insights">
       <div class="stat-grid">
         <div class="stat-card">
+          <div class="stat-icon">💭</div>
           <div class="stat-value">${stats.total}</div>
           <div class="stat-label">Total thoughts logged</div>
         </div>
         <div class="stat-card">
+          <div class="stat-icon">✅</div>
           <div class="stat-value">${stats.resolvedCount}</div>
           <div class="stat-label">Reframed</div>
         </div>
         <div class="stat-card">
+          <div class="stat-icon">⏳</div>
           <div class="stat-value">${stats.pendingCount}</div>
           <div class="stat-label">Waiting on you</div>
         </div>
         <div class="stat-card">
+          <div class="stat-icon">🔥</div>
           <div class="stat-value">${stats.streak}</div>
           <div class="stat-label">Day streak</div>
         </div>
