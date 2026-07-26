@@ -142,24 +142,6 @@ body::after {
 .journal {
   width: 100%;
   max-width: 720px;
-  animation: rise 0.35s ease both;
-}
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .journal {
-    animation: none;
-  }
 }
 
 .journal-header {
@@ -727,23 +709,6 @@ textarea:focus {
   background: linear-gradient(180deg, var(--primary-light), var(--primary));
   border-radius: 6px 6px 3px 3px;
   min-height: 3px;
-  transform-origin: bottom;
-  animation: bar-grow 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-@keyframes bar-grow {
-  from {
-    transform: scaleY(0);
-  }
-  to {
-    transform: scaleY(1);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bar {
-    animation: none;
-  }
 }
 
 .bar-label {
