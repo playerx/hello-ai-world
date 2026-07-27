@@ -12,10 +12,52 @@ body {
   font-family: system-ui, sans-serif;
   background: #f6f6f7;
   color: #1a1a1a;
+  overflow: hidden;
+  position: relative;
 }
 
 h1 {
+  position: relative;
+  z-index: 1;
   font-size: 2.5rem;
   font-weight: 600;
   letter-spacing: -0.02em;
+}
+
+.bottle-field {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.coke-bottle {
+  position: absolute;
+  bottom: -140px;
+  width: 40px;
+  transform: scale(var(--scale, 1));
+  animation: float-up var(--duration, 8s) linear var(--delay, 0s) infinite;
+}
+
+.coke-bottle svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+}
+
+@keyframes float-up {
+  0% {
+    transform: translate(0, 0) scale(var(--scale, 1)) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  90% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(var(--drift, 0), calc(-100vh - 200px)) scale(var(--scale, 1)) rotate(20deg);
+    opacity: 0;
+  }
 }
