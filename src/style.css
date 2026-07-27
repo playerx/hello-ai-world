@@ -19,3 +19,96 @@ h1 {
   font-weight: 600;
   letter-spacing: -0.02em;
 }
+
+.airplane {
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-size: 2rem;
+  pointer-events: none;
+  z-index: 10;
+  will-change: transform;
+}
+
+.puff {
+  position: fixed;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(180, 190, 200, 0.8), rgba(180, 190, 200, 0));
+  pointer-events: none;
+  z-index: 9;
+  animation: puff-fade 1.6s ease-out forwards;
+}
+
+#app {
+  text-align: center;
+}
+
+.portfolio-link a {
+  color: #c2703d;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid currentColor;
+}
+
+.khinkali-hero {
+  position: relative;
+  display: inline-block;
+  margin-top: 0.5rem;
+  animation: hero-bob 3s ease-in-out infinite;
+}
+
+@keyframes hero-bob {
+  0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+  50% { transform: translateY(-8px) rotate(1.5deg); }
+}
+
+.steam {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  width: 9px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(160, 170, 180, 0.55);
+  filter: blur(4px);
+  animation: steam-rise 2.6s ease-out infinite;
+}
+
+.steam.s1 { margin-left: -16px; animation-delay: 0s; }
+.steam.s2 { margin-left: -4px; animation-delay: 0.9s; }
+.steam.s3 { margin-left: 9px; animation-delay: 1.7s; }
+
+@keyframes steam-rise {
+  0% { opacity: 0; transform: translateY(8px) scaleX(0.7); }
+  30% { opacity: 0.8; }
+  100% { opacity: 0; transform: translateY(-34px) scaleX(1.6); }
+}
+
+.floaty {
+  position: fixed;
+  bottom: -7rem;
+  pointer-events: none;
+  z-index: 8;
+  animation-name: float-up;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes float-up {
+  0%   { transform: translateY(0) translateX(0) rotate(-12deg); }
+  25%  { transform: translateY(-32vh) translateX(3vw) rotate(12deg); }
+  50%  { transform: translateY(-64vh) translateX(-3vw) rotate(-12deg); }
+  75%  { transform: translateY(-96vh) translateX(3vw) rotate(12deg); }
+  100% { transform: translateY(-130vh) translateX(0) rotate(-12deg); }
+}
+
+@keyframes puff-fade {
+  from {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(3) translateY(-6px);
+  }
+}
