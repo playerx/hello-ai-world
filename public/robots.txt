@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://playerx-59i8n0-24-bwf33.sprites.app/sitemap.xml
