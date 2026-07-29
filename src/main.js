@@ -31,3 +31,42 @@ document.querySelector('#app').innerHTML = `
     </g>
   </svg>
 `;
+
+const canvas = document.createElement('canvas');
+canvas.id = 'matrix';
+document.body.prepend(canvas);
+const ctx = canvas.getContext('2d');
+
+const EMOJIS = ['⛩️', '🌸', '🗻', '🍣', '🍜', '🎌', '🍙', '🏯', '🎏', '🍡', '👘', '🥢', '🎋', '🗾', '🐟'];
+const FONT_SIZE = 26;
+let columns = [];
+
+function resetColumns() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const count = Math.ceil(canvas.width / (FONT_SIZE * 1.4));
+  columns = Array.from({ length: count }, (_, i) => ({
+    x: i * FONT_SIZE * 1.4,
+    y: Math.random() * canvas.height,
+    speed: 0.3 + Math.random() * 0.7,
+  }));
+}
+
+function drawMatrix() {
+  ctx.fillStyle = 'rgba(15, 81, 50, 0.15)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.font = `${FONT_SIZE}px serif`;
+  for (const col of columns) {
+    ctx.fillText(EMOJIS[Math.floor(Math.random() * EMOJIS.length)], col.x, col.y);
+    col.y += col.speed * FONT_SIZE * 0.35;
+    if (col.y > canvas.height + FONT_SIZE) {
+      col.y = -FONT_SIZE;
+      col.speed = 0.3 + Math.random() * 0.7;
+    }
+  }
+  requestAnimationFrame(drawMatrix);
+}
+
+window.addEventListener('resize', resetColumns);
+resetColumns();
+drawMatrix();

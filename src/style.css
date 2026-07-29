@@ -20,7 +20,16 @@ h1 {
   letter-spacing: -0.02em;
 }
 
+#matrix {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.55;
+}
+
 #app {
+  position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
   gap: 0.5rem;
