@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "node --env-file-if-exists=.env server/index.js",
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview"
@@ -12,5 +13,8 @@
   "devDependencies": {
     "playwright": "^1.61.1",
     "vite": "^8.1.4"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
   }
 }
