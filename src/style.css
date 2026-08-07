@@ -10,12 +10,70 @@ body {
   display: grid;
   place-items: center;
   font-family: system-ui, sans-serif;
-  background: #f6f6f7;
-  color: #1a1a1a;
+  background: linear-gradient(135deg, #ff5fa2, #a45fff, #5fd0ff);
+  background-size: 300% 300%;
+  animation: gradient-shift 12s ease infinite;
+  color: #fff;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+#app {
+  text-align: center;
+  padding: 2rem;
 }
 
 h1 {
-  font-size: 2.5rem;
-  font-weight: 600;
+  font-size: 3.5rem;
+  font-weight: 700;
   letter-spacing: -0.02em;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.7), 0 4px 24px rgba(164, 95, 255, 0.6);
+}
+
+.sushi {
+  font-size: 5rem;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0) rotate(-10deg);
+  }
+  50% {
+    transform: translateY(-30px) rotate(10deg);
+  }
+}
+
+.music-toggle {
+  margin-top: 2rem;
+  padding: 0.8rem 1.6rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #a4008f;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.music-toggle:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.35);
+}
+
+.player {
+  margin-top: 1.5rem;
+}
+
+.player iframe {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  max-width: 100%;
 }
